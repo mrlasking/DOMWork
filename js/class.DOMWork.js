@@ -1,6 +1,6 @@
-(function (e) {
+!function (window) {
 
-    var DOMWork = function () {
+    var DOMWork = function() {
         this.elements = [];
     };
     
@@ -11,23 +11,25 @@
     DOMWork.prototype.getById = function (id) {
         this.elements = [];
         this.elements.push(document.getElementById(id));
+        console.log(this);
         return this;
     };
     
     DOMWork.prototype.getByClass = function (className) {
         this.elements = [];
-        this.elements = document.getElementsByClassName(className);
+        this.elements = [].slice.call(document.getElementsByClassName(className), 0);
+        console.log(this);
         return this;
     };
 
     DOMWork.prototype.create = function (tag) {
-        this.elements = [];
-        this.elements.push(document.createElement(tag));
-        return this;
+       this.elements = [];
+       this.elements.push(document.createElement(tag));
+       return this;
     };
 
     DOMWork.prototype.insHTML = function (html) {
-        [].map.call(this.elements, function(elem) {
+        this.elements.map(function(elem) {
             elem.innerHTML = html;
         });
         
@@ -35,9 +37,10 @@
     };
 
     DOMWork.prototype.appendTo = function (obj) {
-        [].forEach.call(this.elements, function(elem) {
+        this.elements.forEach( function(elem) {
             obj.elements[0].appendChild(elem);
         });
+
         return this;
     };
 
@@ -52,33 +55,20 @@
     DOMWork.prototype.removeClass = function (classes) {
         return classWork.apply(this, [classes, 'remove']);        
     };
-
-    DOMWork.prototype.bind = function (action, func) {
-        [].forEach.call(this.elements, function(elem) {
-            elem.addEventListener(action, func);
-        });
-        return this;        
-    };
-    DOMWork.prototype.data = function (key, value) {       
-        if (value === undefined){
-            return this.elements[0].dataset[key];
-        }
-
-        [].forEach.call(this.elements, function(elem) {
-            elem.dataset[key] = value;
-        });    
-        return this;
-    };
     
     function classWork(classes, action) {
+
         var targets = this.elements;
         
-        [].forEach.call(targets, function(target) {
+        targets.forEach(function(target) {
+            
             var clArr = target.className.split(/\s+/i);
             var addedClasses = classes.split(/\s+/i);
-    
+            
             addedClasses.forEach(function (classes) {
+
                 var index = clArr.indexOf(classes);
+                
                 switch (action) {
                     case 'toggle':
                         !~index ? clArr.push(classes) : delete clArr[index];
@@ -87,16 +77,38 @@
                         !~index ? clArr.push(classes) : false;
                         break;
                     case 'remove':
-                        !~index ? false : delete clArr[index];
-                        break;
+                        !~index ? false : clArr.splice(index, 1);
                 }
+                
             });
     
-            target.className = clearArray(clArr).join(' ');
+            
+           target.className = clearArray(clArr).join(' ');
+            
         });
-        
+
         return this;
     }
+    
+     DOMWork.prototype.bind = function (action, func) {
+        this.elements.forEach(function(elem) {
+            elem.addEventListener(action, func);
+        });
+        return this;        
+    };
+    
+    DOMWork.prototype.data = function (key, value) {       
+        if (typeof value === 'undefined'){
+            return this.elements[0].dataset[key];
+        }
+        
+        this.elements.forEach(function(elem) {
+            elem.dataset[key] = value;
+        });    
+        
+        return this;
+        
+    };
 
     //Removes duplicates from array
     function clearArray(array) {
@@ -109,4 +121,4 @@
 
     window.DW = window.$DW = DW;
 
-})();
+}(window);
