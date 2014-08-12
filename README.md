@@ -20,6 +20,8 @@ Also you can use ```grunt coverage``` command to view tests code coverage.
 ####Building
 If you want to build production and minified version with all plugins, use ```grunt build``` command
 
+Grunt stores a library build in /dist/ directory. Also it creates a simple index.html file with domwork.js connected. You can play with it.
+
 To build version without plugins, execute ```grunt build:min```
 
 To choose list of plugins you want to include in your bild, execute
