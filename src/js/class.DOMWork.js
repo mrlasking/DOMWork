@@ -1,4 +1,4 @@
-!function (window) {
+!function (window, plugins) {
 
     var DOMWork = function () {
         this.elements = [];
@@ -109,6 +109,13 @@
         return this;
 
     };
+
+    DOMWork.prototype.plugin = function( plugin ) {
+        /* istanbul ignore else */
+        if (typeof plugin == 'object') {
+            DOMWork.prototype[plugin.name] = plugin.func;
+        }
+    }
 
     function clearArray(array) {
         return array.filter(function (item, index) {

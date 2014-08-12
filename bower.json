@@ -1,0 +1,26 @@
+{
+  "name": "domwork",
+  "version": "0.0.3",
+  "homepage": "https://github.com/mrlasking/domwork",
+  "authors": [
+    "Dmitry Podanchuk & Pavel Evsegneev"
+  ],
+  "description": "Simple DOM manipulation library",
+  "main": "dist/domwork.js",
+  "moduleType": [
+    "globals"
+  ],
+  "license": "ISC",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "jasmine-jquery": "~2.0.5"
+  }
+}

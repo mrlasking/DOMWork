@@ -16,26 +16,31 @@ module.exports = function (grunt) {
                     'Visit <%= pkg.homepage %> for new versions or contributing. */\n'
             },
             dist: {
-                src: ['js/class.DOMWork.js'],
+                src: ['src/js/**/*.js'],
+                dest: 'dist/domwork.js'
+            },
+            plugins: {
+                src: ['src/js/plugins/*.js'],
+                dest: 'dist/domwork.js'
+            },
+            min: {
+                src: ['src/js/class.DOMWork.js'],
                 dest: 'dist/domwork.js'
             }
         },
 
         clean: ["dist"],
-        /*copy: {
+        copy: {
             main: {
                 files: [
                     {
                         expand: true,
-                        src: ['js/class.DOMWork.js'], dest: 'dist/',
-                        flatten: true,
-                        rename: function(dest, src) {
-                            return dest + 'domwork.js'
-                        }
+                        src: ['src/index.html'], dest: 'dist/',
+                        flatten: true
                     }
                 ]
             }
-        },*/
+        },
 
         uglify: {
             options: {
@@ -43,7 +48,7 @@ module.exports = function (grunt) {
             },
             my_target: {
                 files: {
-                    'dist/domwork.min.js': ['js/class.DOMWork.js']
+                    'dist/domwork.min.js': ['dist/domwork.js']
                 }
             }
         },
@@ -51,7 +56,7 @@ module.exports = function (grunt) {
         jshint: {
             all: [
                 "Gruntfile.js",
-                "js/**/*.js",
+                "src/js/**/*.js",
                 "spec/**/*.js"
             ], options: {
                 jshintrc: '.jshintrc'
@@ -59,7 +64,7 @@ module.exports = function (grunt) {
         },
         jasmine: {
             coverage: {
-                src: ['js/**/*.js'],
+                src: ['src/js/**/*.js'],
                 options: {
                     specs: ['test/**/*.js'],
                     vendor: [
@@ -81,7 +86,7 @@ module.exports = function (grunt) {
                 }
             },
             test: {
-                src: "js/**/*.js",
+                src: "src/js/**/*.js",
                 options: {
                     vendor: [
                         'bower_components/jquery/dist/jquery.js',
@@ -112,7 +117,36 @@ module.exports = function (grunt) {
 
     grunt.registerTask('test', ['jshint', 'jasmine:test']);
     grunt.registerTask('default', ['jshint','jasmine:coverage']);
-    grunt.registerTask('build', ['test', 'clean', 'concat', 'uglify']);
+
+    grunt.registerTask('build', 'build domwork with defined plugins only', function() {
+        var plugins = grunt.option('plugins') || '';
+
+        grunt.task.run(['test', 'clean']);
+
+        if (plugins !== '') {
+            plugins = plugins.split(',');
+
+            var src = ['src/js/class.DOMWork.js'];
+
+            plugins.forEach(function(item) {
+
+                src.push('src/js/plugins/'+item+'.js');
+
+            });
+
+            grunt.config.set('concat.plugins.src', src);
+
+            grunt.task.run(['concat:plugins']);
+
+        } else {
+            grunt.task.run(['concat:dist']);
+        }
+
+        grunt.task.run(['uglify', 'copy']);
+
+    });
+
+    grunt.registerTask('build:min', ['test', 'clean', 'concat:min', 'uglify', 'copy']);
 
     grunt.registerTask('coverage', 'start web server for viewing istanbul coverage in browser', function() {
         grunt.task.run('jasmine:coverage');
