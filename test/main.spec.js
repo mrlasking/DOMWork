@@ -61,11 +61,9 @@ describe('1. Main DOMWork library', function () {
 
         it('1.1.9 Should add an event listener to element', function () {
             var event;
-            var val = 0;
+            var callback = sinon.spy();
 
-            elem.bind('click', function () {
-                val = 1;
-            });
+            elem.bind('click', callback);
 
             event = document.createEvent("HTMLEvents");
             event.initEvent("click", true, true);
@@ -74,7 +72,7 @@ describe('1. Main DOMWork library', function () {
 
             elem.elements[0].dispatchEvent(event);
 
-            expect(val).toBe(1);
+            expect(callback.called).toBe(true);
 
         });
 

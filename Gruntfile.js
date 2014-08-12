@@ -69,7 +69,9 @@ module.exports = function (grunt) {
                     specs: ['test/**/*.js'],
                     vendor: [
                         'bower_components/jquery/dist/jquery.js',
-                        'bower_components/jasmine-jquery/lib/jasmine-jquery.js'
+                        'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
+                        'bower_components/sinonjs/sinon.js'
+                        
                     ],
                     version: '2.0.0',
                     template: require('grunt-template-jasmine-istanbul'),
@@ -90,7 +92,8 @@ module.exports = function (grunt) {
                 options: {
                     vendor: [
                         'bower_components/jquery/dist/jquery.js',
-                        'bower_components/jasmine-jquery/lib/jasmine-jquery.js'
+                        'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
+                        'bower_components/sinonjs/sinon.js'
                     ],
                     specs: "test/**/*.js",
                     version: '2.0.0'
