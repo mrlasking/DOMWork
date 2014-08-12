@@ -30,6 +30,6 @@
     "jasmine-node": "^1.14.5",
     "jshint": "^2.5.3",
     "open": "0.0.5",
-    "phantomjs": "^1.9.7-15",
+    "phantomjs": "^1.9.7-15"
   }
 }

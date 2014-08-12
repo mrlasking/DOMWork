@@ -2,6 +2,21 @@ jasmine.getFixtures().fixturesPath = 'test/fixtures';
 
 describe('1. Main DOMWork library', function () {
 
+    describe('1.0 Initializing', function() {
+        it('1.0.1 Should have properties', function() {
+
+            expect($DW.plugins.length).toBeGreaterThan(-1);
+
+        });
+
+        it('1.0.2 Should trigger an error if plugin with same name connected twice', function() {
+            var dummyPlugin = {name:'pubsub', func: function() {}};
+            expect(function(){$DW().plugin( dummyPlugin ); })
+                .toThrow(new Error('Possible plugins conflict: plugin "' +
+                    dummyPlugin.name+'" already connected'));
+        });
+    });
+
     describe('1.1 Getting by id', function () {
         var $elem;
         var elem;

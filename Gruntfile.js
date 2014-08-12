@@ -66,7 +66,7 @@ module.exports = function (grunt) {
             coverage: {
                 src: ['src/js/**/*.js'],
                 options: {
-                    specs: ['test/**/*.js'],
+                    specs: ["test/main.spec.js", "test/plugins/showhide.spec.js", "test/plugins/pubsub.spec.js"],
                     vendor: [
                         'bower_components/jquery/dist/jquery.js',
                         'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
@@ -88,14 +88,14 @@ module.exports = function (grunt) {
                 }
             },
             test: {
-                src: "src/js/**/*.js",
+                src: ["src/js/**/*.js"],
                 options: {
                     vendor: [
                         'bower_components/jquery/dist/jquery.js',
                         'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
                         'bower_components/sinonjs/sinon.js'
                     ],
-                    specs: "test/**/*.js",
+                    specs: ["test/main.spec.js", "test/plugins/showhide.spec.js", "test/plugins/pubsub.spec.js"],
                     version: '2.0.0'
                 }
             }

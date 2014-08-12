@@ -8,6 +8,8 @@
         return new DOMWork();
     }
 
+    DW.plugins = [];
+
     DOMWork.prototype.getById = DOMWork.prototype.byId = function (id) {
         this.elements = [];
         this.elements.push(document.getElementById(id));
@@ -113,7 +115,12 @@
     DOMWork.prototype.plugin = function( plugin ) {
         /* istanbul ignore else */
         if (typeof plugin == 'object') {
-            DOMWork.prototype[plugin.name] = plugin.func;
+            if (DW.plugins.indexOf(plugin.name) === -1) {
+                DW.plugins.push(plugin.name)
+                DOMWork.prototype[plugin.name] = plugin.func;
+            } else {
+                throw new Error('Possible plugins conflict: plugin "' + plugin.name + '" already connected');
+            }
         }
     }
 

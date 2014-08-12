@@ -6,6 +6,7 @@
 			this.elements.forEach(function(elem) {
 				elem.style.display = 'none';
 			});
+			return this;
 		}
 	});
 
@@ -15,6 +16,7 @@
 			this.elements.forEach(function(elem) {
 				elem.style.display = '';
 			});
+			return this;
 		}
 	});
 
