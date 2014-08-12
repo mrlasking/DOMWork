@@ -36,8 +36,13 @@ describe('1. Main DOMWork library', function () {
             expect($elem).toContainText('Test');
         });
 
-        it('1.1.3 Should append one element to another', function () {
+        it('1.1.3.1 Should append one element to another', function () {
             elem.appendTo($DW().byId('append'));
+            expect($elem.parent()).toContainElement('div#test');
+        });
+
+        it('1.1.3.2 Should prepend one element to another', function () {
+            elem.prependTo($DW().byId('append'));
             expect($elem.parent()).toContainElement('div#test');
         });
 
@@ -89,6 +94,11 @@ describe('1. Main DOMWork library', function () {
 
             expect(callback.called).toBe(true);
 
+        });
+
+        it('1.1.10 Should set an element as node', function () {
+            var node = $DW().node($elem);
+            expect(node.elements.length).toBeGreaterThan(0);
         });
 
     });
