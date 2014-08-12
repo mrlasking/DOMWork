@@ -9,6 +9,12 @@
     }
 
     DW.plugins = [];
+    
+    DOMWork.prototype.node = function(obj){
+        this.elements = [];
+        this.elements.push(obj);
+        return this;
+    };
 
     DOMWork.prototype.getById = DOMWork.prototype.byId = function (id) {
         this.elements = [];
@@ -41,6 +47,13 @@
             obj.elements[0].appendChild(elem);
         });
 
+        return this;
+    };
+
+    DOMWork.prototype.prependTo = function (obj) {
+        this.elements.forEach(function (elem) {
+            obj.elements[0].insertBefore(elem, obj.elements[0].firstChild);
+        });
         return this;
     };
 
@@ -110,6 +123,14 @@
 
         return this;
 
+    };
+    
+    DOMWork.prototype.attr = function (attributeName, attributeValue) {
+        this.elements.forEach(function (element) {
+            element.setAttribute(attributeName,attributeValue);
+        });
+
+        return this;
     };
 
     DOMWork.prototype.plugin = function( plugin ) {
