@@ -1,7 +1,7 @@
-DOMWork
+DOMWork  [![Build Status](https://travis-ci.org/mrlasking/DOMWork.svg?branch=master)](https://travis-ci.org/mrlasking/DOMWork)
 =======
 
-Simple extendible DOM manipulation library.
+Simple extendible DOM manipulation library. 
 
 
 ###Installation
