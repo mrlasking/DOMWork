@@ -61,7 +61,8 @@
 				subscribe: dw.pubsub.subscribe,
 				unsubscribe: dw.pubsub.unsubscribe
 			}
-		}
+		},
+		needToRun: true
 	});
 
 }($DW);

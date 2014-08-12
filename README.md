@@ -31,3 +31,38 @@ To choose list of plugins you want to include in your bild, execute
 Option '--plugins' tells grunt to add files with specified names from src/js/plugins directory.
 
 E.g: ```grunt build --plugins=showhide``` will add a src/js/plugins/showhide.js plugin.
+
+###PubSub
+
+DOMWork has a plugin with Addy Osmani publish/subscribe implementation.
+
+It can be used this way:
+
+```javascript
+
+/*
+Subscribe to an 'app/alert' topic with function that will alert a message 
+and get the subscribe token
+*/
+var subscriber = $DW.pubsub.subscribe('app/alert', function(m) {
+	alert(m.test);
+});
+
+//Unsubscribe from topic by token.
+$DW.pubsub.unsubscribe(subscriber);
+
+//Subscribe to an 'app/alert' topic with function that will log a message to console
+$DW.pubsub.subscribe('app/alert', function(m) {
+	console.log(m);
+});
+
+$DW().byId('btn').bind('click', function() {
+	/*
+	Publish an 'app/alert' topic with {value: 'test'} data by clicking a button.
+	It will execute all functions that subscribed on this topic.
+	*/
+	$DW.pubsub.publish('app/alert', {value: 'test'}); 
+});
+
+```
+

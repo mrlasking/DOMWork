@@ -13,7 +13,7 @@ describe('3. PubSub plugin', function () {
 
     it('3.1 Should subscribe to topic', function() {
     	var callback = sinon.spy();
-    	var subscription = $DW().pubsub().subscribe('test/test1', callback);
+    	var subscription = $DW.pubsub.subscribe('test/test1', callback);
 
     	expect(subscription).toBe(1);
 

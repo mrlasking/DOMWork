@@ -154,7 +154,11 @@ module.exports = function (grunt) {
     grunt.registerTask('coverage', 'start web server for viewing istanbul coverage in browser', function() {
         grunt.task.run('jasmine:coverage');
 
-        grunt.event.once('connect.coverage.listening', function(host, port) {
+            var port = grunt.option('port') || 8080;
+
+        grunt.config.set('connect.coverage.options.port', port);
+
+        grunt.event.once('connect.coverage.listening', function(host) {
             var coverageUrl = 'http://localhost:' + port;
             grunt.log.writeln('Istanbul coverage available at: ' + coverageUrl);
             require('open')(coverageUrl);

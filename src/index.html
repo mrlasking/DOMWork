@@ -13,9 +13,26 @@
         <li class="test">Two</li>
         <li class="test">Three</li>
     </ul>
+    <button id='btn'>Button</button>
 
 
 <script type="text/javascript" src="domwork.js"></script>
+<script type="text/javascript">
+    window.onload = function() {
+    	$DW().byId('btn').bind('click', function() {
+    		$DW.pubsub.publish('app/alert', 'Message');
+    	});
+
+    	$DW.pubsub.subscribe('app/alert', function(m) {
+    		alert(m);
+    	});
+
+    	$DW.pubsub.subscribe('app/alert', function(m) {
+    		console.log(m);
+    	});
+    }
+
+</script>
 
 </body>
 </html>

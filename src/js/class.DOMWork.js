@@ -118,6 +118,10 @@
             if (DW.plugins.indexOf(plugin.name) === -1) {
                 DW.plugins.push(plugin.name)
                 DOMWork.prototype[plugin.name] = plugin.func;
+                if (plugin.needToRun) {
+                    var d = new DOMWork();
+                    d[plugin.name]();
+                }
             } else {
                 throw new Error('Possible plugins conflict: plugin "' + plugin.name + '" already connected');
             }
