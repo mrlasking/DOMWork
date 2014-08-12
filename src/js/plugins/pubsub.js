@@ -56,12 +56,10 @@
 
 			dw.pubsub = dw.pubsub || new ps();
 
-			return {
-				publish: dw.pubsub.publish,
-				subscribe: dw.pubsub.subscribe,
-				unsubscribe: dw.pubsub.unsubscribe
-			}
+			return "Use it from $DW directly: $DW.pubsub.publish, $DW.pubsub.publish"
+
 		},
+
 		needToRun: true
 	});
 
