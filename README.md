@@ -8,7 +8,7 @@ Custom 'jQ lite' class
 
 Run ```npm install``` to install dependencies.
 
-You need to have bower and grunt-cli installed globally, so run ```npm install -g bower grunt-cli
+You need to have bower and grunt-cli installed globally, so run ```npm install -g bower grunt-cli```
 
 After that install bower dependencies: ```bower install```
 
