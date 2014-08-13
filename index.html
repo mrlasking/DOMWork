@@ -75,14 +75,6 @@
 
 </div>
 
-<div>
-Two-way binding test
-<input id='bindInput'>
-<div id="bindDiv"></div>
-<textarea id='bindTextarea'></textarea>
-<button id='bindButton'>Change model value via javascript</button>
-</div>
-
 
 <div class='todo'>
 
@@ -106,47 +98,71 @@ Two-way binding test
 
 </div>
 
+<div class="ajax">
+
+    <div>
+        Data loaded via ajax and showed with Handlebars:
+    </div>
+
+    <script id="ajax-template" type="text/x-handlebars-template">
+        <p>{{id}}: {{name}}</p>
+    </script>
+
+    <div id="ajax-result">
+
+    </div>
+
+</div>
+
 <script type="text/javascript" src="domwork.js"></script>
 <script type="text/javascript">
     window.onload = function() {
 
         var KEYCODE_ENTER = 13;
 
-        /*
-            Two-way binding test
-        */
-
-        var obj = {
-            myText: "Two-way binding is cool!"
-        }
-
-        var m = new $DW.Model(obj);
-
-        m.myText.bindTo( $DW().byId('bindInput') );
-        m.myText.bindTo( $DW().byId('bindDiv') );
-        m.myText.bindTo( $DW().byId('bindTextarea') );
-
-        $DW().byId('bindButton').bind('click', function() {
-            m.myText('Changed via javascript');
-        });
-
-        /*
-            Pub-sub demo
-        */
-
         var widgets = {};
 
         var lss = new localStorageService();
 
-        //Compiling habdlebars template
+        //Compiling handlebars template
         var source = $DW().byId('test-template').elements[0].innerHTML;
         //template here is a function that accepts data object
         var greetingTemplate = $DW.Handlebars.compile(source);
 
-        //Compiling habdlebars template
-        var source = $DW().byId('task-template').elements[0].innerHTML;
-        //template here is a function that accepts data object
+        source = $DW().byId('task-template').elements[0].innerHTML;
         var taskTemplate = $DW.Handlebars.compile(source);
+
+        source = $DW().byId('ajax-template').elements[0].innerHTML;
+        var ajaxTemplate = $DW.Handlebars.compile(source);
+
+        function ajaxDataWidget() {
+
+            var req = $DW.get({
+                url: '/data.json'
+            });
+
+            req.then(function(data) {
+                return JSON.parse(data);
+            }).then(function(data) {
+                $DW.pubsub.publish('app/ajaxLoadTest', data);
+            });
+
+            this.name = 'ajaxData';
+            this.start = function() {
+                $DW.pubsub.subscribe('app/ajaxLoadTest', function(data) {
+
+                    var layout = "";
+
+                    for (var i = 0; i < data.length; i++) {
+                        layout += ajaxTemplate(data[i]);
+                    }
+
+                    $DW().byId('ajax-result').insHTML(layout);
+
+                });
+            }
+        }
+
 
         function nameInputWidget() {
 
@@ -326,6 +342,8 @@ Two-way binding test
         var ndw = new nameDisplayWidget();
         var niw = new nameInputWidget();
 
+        var adw = new ajaxDataWidget();
+
         /*
             We need to load widgets in a right order.
 
@@ -343,6 +361,8 @@ Two-way binding test
 
         widgets[ndw.name] = ndw;
         widgets[niw.name] = niw;
+
+        widgets[adw.name] = adw;
 
         for (var widget in widgets) {
             widgets[widget].start();
