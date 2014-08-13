@@ -29,17 +29,7 @@
 
 									if (value !== f.toString()) {
 
-										for (var i in bindedTo) {
-											if (bindedTo[i].nodeName === 'INPUT') {
-												bindedTo[i].value = value;
-											} 
-											if (bindedTo[i].nodeName === 'TEXTAREA') {
-												bindedTo[i].value = value;
-											}
-											if (bindedTo[i].nodeName === 'DIV') {
-												bindedTo[i].innerText = value;
-											}
-										}
+										updateBinded(value);
 
 										f.toString = function() {
 											return value;
@@ -70,27 +60,17 @@
 														return item.value;
 													}
 													
-													for (var i in bindedTo) {
-														if (item != bindedTo[i])
-															if (bindedTo[i].nodeName === 'INPUT') {
-																bindedTo[i].value = item.value;
-															} 
-															if (bindedTo[i].nodeName === 'TEXTAREA') {
-																bindedTo[i].value = item.value;
-															}
-															if (bindedTo[i].nodeName === 'DIV') {
-																bindedTo[i].innerText = item.value;
-															}
-													}
+													updateBinded(item.value, item);
 
 												}, 0);
 											});
 										}(item);
-
+										return;
 									} 
 									if (item.nodeName === 'DIV') {
 										item.innerText = f.toString();
 										bindedTo.push(item);
+										return;
 									}
 									if (item.nodeName === 'TEXTAREA') {
 										item.value = f.toString();
@@ -102,26 +82,41 @@
 													f.toString = function() {
 														return item.value;
 													}
-													
-													if (item != bindedTo[i])
-														for (var i in bindedTo) {
-															if (bindedTo[i].nodeName === 'INPUT') {
-																bindedTo[i].value = item.value;
-															} 
-															if (bindedTo[i].nodeName === 'TEXTAREA') {
-																bindedTo[i].value = item.value;
-															}
-															if (bindedTo[i].nodeName === 'DIV') {
-																bindedTo[i].innerText = item.value;
-															}
-														}
+
+													updateBinded(item.value, item);
 
 												}, 0);
 											});
 										}(item);
-
+										return;
 									} 
 								});
+
+							}
+
+							function updateBinded(value, item) {
+
+								var _update = function() {
+									if (bindedTo[i].nodeName === 'INPUT') {
+										bindedTo[i].value = value;
+									} 
+									if (bindedTo[i].nodeName === 'TEXTAREA') {
+										bindedTo[i].value = value;
+									}
+									if (bindedTo[i].nodeName === 'DIV') {
+										bindedTo[i].innerText = value;
+									}
+								}
+
+								for (var i in bindedTo) {
+									if ( typeof item !== 'undefined') {
+										if (item != bindedTo[i]) {
+											_update();
+										}
+									} else {
+										_update();
+									}
+								}
 
 							}
 

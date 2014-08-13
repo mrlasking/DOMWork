@@ -42,9 +42,9 @@ describe('4. Model plugin', function () {
     	expect(model.name.toString()).toBe("test2");
 		expect($elem.val()).toBe('test2');
 
-		var e = jQuery.Event("keydown");
+		/*var e = jQuery.Event("keydown");
 		e.which = 51;
-		$elem.trigger(e);
+		$elem.trigger(e);*/
 
         //expect(model.name.toString()).toBe('test3');
 
