@@ -75,6 +75,14 @@
 
 </div>
 
+<div>
+Two-way binding test
+<input id='bindInput'>
+<div id="bindDiv"></div>
+<textarea id='bindTextarea'></textarea>
+<button id='bindButton'>Change model value via javascript</button>
+</div>
+
 
 <div class='todo'>
 
@@ -103,6 +111,28 @@
     window.onload = function() {
 
         var KEYCODE_ENTER = 13;
+
+        /*
+            Two-way binding test
+        */
+
+        var obj = {
+            myText: "Two-way binding is cool!"
+        }
+
+        var m = new $DW.Model(obj);
+
+        m.myText.bindTo( $DW().byId('bindInput') );
+        m.myText.bindTo( $DW().byId('bindDiv') );
+        m.myText.bindTo( $DW().byId('bindTextarea') );
+
+        $DW().byId('bindButton').bind('click', function() {
+            m.myText('Changed via javascript');
+        });
+
+        /*
+            Pub-sub demo
+        */
 
         var widgets = {};
 

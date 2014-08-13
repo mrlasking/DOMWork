@@ -66,12 +66,16 @@ module.exports = function (grunt) {
             coverage: {
                 src: ['src/js/**/*.js'],
                 options: {
-                    specs: ["test/main.spec.js", "test/plugins/showhide.spec.js", "test/plugins/pubsub.spec.js"],
+                    specs: [
+                        "test/main.spec.js", 
+                        "test/plugins/showhide.spec.js", 
+                        "test/plugins/pubsub.spec.js",
+                        "test/plugins/model.spec.js"
+                    ],
                     vendor: [
                         'bower_components/jquery/dist/jquery.js',
                         'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
                         'bower_components/sinonjs/sinon.js'
-                        
                     ],
                     version: '2.0.0',
                     template: require('grunt-template-jasmine-istanbul'),
@@ -95,7 +99,12 @@ module.exports = function (grunt) {
                         'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
                         'bower_components/sinonjs/sinon.js'
                     ],
-                    specs: ["test/main.spec.js", "test/plugins/showhide.spec.js", "test/plugins/pubsub.spec.js"],
+                    specs: [
+                        "test/main.spec.js", 
+                        "test/plugins/showhide.spec.js", 
+                        "test/plugins/pubsub.spec.js",
+                        "test/plugins/model.spec.js"
+                    ],
                     version: '2.0.0'
                 }
             }
