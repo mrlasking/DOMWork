@@ -26,6 +26,7 @@
 
         //Compiling habdlebars template
         var source = $DW().byId('test-template').elements[0].innerHTML;
+        //template here is a function that accepts data object
         var template = $DW.Handlebars.compile(source);
 
         function nameInputWidget() {
@@ -52,8 +53,11 @@
             this.start = function() {
                 $DW.pubsub.subscribe('app/greeting', function(data) {
                     if (data.name !== '') {
-                        var data = { name: data.name};
+
+                        //inserting Handlebars template
+                        var data = { name: data.name };
                         $DW().byId('content').insHTML(template(data));
+
                     }
                 });
             };
