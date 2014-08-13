@@ -108,7 +108,12 @@
         <p>{{id}}: {{name}}</p>
     </script>
 
-    <div id="ajax-result">
+    <p>GET:</p>
+    <div id="ajax-get-result">
+
+    </div>
+    <p>POST:</p>
+    <div id="ajax-post-result">
 
     </div>
 
@@ -138,18 +143,36 @@
         function ajaxDataWidget() {
 
             var req = $DW.get({
-                url: '/data.json'
+                //url: '/data.json'
+                url: 'http://localhost:3000/test',
+                data: {
+                    test: 'test-get',
+                    id: 1
+                }
             });
 
             req.then(function(data) {
                 return JSON.parse(data);
             }).then(function(data) {
-                $DW.pubsub.publish('app/ajaxLoadTest', data);
+                $DW.pubsub.publish('app/ajaxGetTest', data);
+            });
+
+            //And another way of calling:
+            $DW.post({
+                //url: '/data.json'
+                url: 'http://localhost:3000/testPost',
+                data: {
+                    test: 'test-post',
+                    id: 2
+                },
+                method: 'POST'
+            }).then(function(data) {
+                $DW.pubsub.publish('app/ajaxPostTest', data);
             });
 
             this.name = 'ajaxData';
             this.start = function() {
-                $DW.pubsub.subscribe('app/ajaxLoadTest', function(data) {
+                $DW.pubsub.subscribe('app/ajaxGetTest', function(data) {
 
                     var layout = "";
 
@@ -157,7 +180,19 @@
                         layout += ajaxTemplate(data[i]);
                     }
 
-                    $DW().byId('ajax-result').insHTML(layout);
+                    $DW().byId('ajax-get-result').insHTML(layout);
+
+                });
+
+                $DW.pubsub.subscribe('app/ajaxPostTest', function(data) {
+
+                    var layout = "";
+
+                    for (var i = 0; i < data.length; i++) {
+                        layout += ajaxTemplate(data[i]);
+                    }
+
+                    $DW().byId('ajax-post-result').insHTML(layout);
 
                 });
             }

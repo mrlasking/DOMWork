@@ -11,10 +11,11 @@
 
             var ajax = function(options, method) {
 
-                var reqString = '';
+                var reqArr = [];
                 for (var d in options.data) {
-                    reqString += d + '=' + options.data[d].toString();
+                    reqArr.push(d + '=' + options.data[d].toString());
                 }
+                var reqString = reqArr.join('&');
 
                 return new Promise(function(resolve, reject) {
                     var req = new XMLHttpRequest();
@@ -26,7 +27,7 @@
 
                     var url = options.url + ((method == 'GET') ? "?"+reqString : "" );
 
-                    req.open(method, url);
+                    req.open(method, url, true);
 
                     /*istanbul ignore next*/
                     req.onload = function() {
@@ -45,6 +46,8 @@
 
                     if (method === "POST") {
                         req.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                        req.setRequestHeader("Content-length", params.length);
+                        req.setRequestHeader("Connection", "close");
                     }
 
                     req.send( reqString );

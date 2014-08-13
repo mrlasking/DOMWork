@@ -35,7 +35,7 @@ module.exports = function (grunt) {
                 files: [
                     {
                         expand: true,
-                        src: ['src/index.html', 'src/data.json'], dest: 'dist/',
+                        src: ['src/index.html', 'src/data.json', 'src/index.js'], dest: 'dist/',
                         flatten: true
                     }
                 ]
@@ -126,6 +126,14 @@ module.exports = function (grunt) {
             },
             src: ['**/*']
         },
+        run: {
+            dist: {
+                cmd: 'node',
+                args: [
+                    'dist/index.js',
+                ]
+            }
+        }
     });
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -135,13 +143,14 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-run');
     grunt.loadNpmTasks('grunt-gh-pages');
 
 
     grunt.registerTask('test', ['jshint', 'jasmine:test']);
     grunt.registerTask('default', ['jshint','jasmine:coverage']);
 
-    grunt.registerTask('build', 'build domwork with defined plugins only', function() {
+    grunt.registerTask('build', 'build domwork', function() {
         var plugins = grunt.option('plugins') || '';
 
         grunt.task.run(['test', 'clean']);
@@ -171,6 +180,17 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build:min', ['test', 'clean', 'concat:min', 'uglify', 'copy']);
 
+    grunt.registerTask('demo', function() {
+        grunt.task.run(['test', 'clean', 'concat:dist', 'uglify', 'copy', 'run']);
+        //var port = grunt.option('port') || 8080;
+        var port = 3000;
+        var demoUrl = 'http://localhost:' + port;
+        setTimeout( function() {
+            require('open')(demoUrl)
+        }, 12000 );
+        //require('open')(demoUrl);
+    });
+
     grunt.registerTask('deploy', ['build', 'gh-pages']);
 
     grunt.registerTask('coverage', 'start web server for viewing istanbul coverage in browser', function() {
@@ -187,5 +207,7 @@ module.exports = function (grunt) {
         });
         grunt.task.run('connect:coverage:keepalive');
     });
+
+
 
 };
