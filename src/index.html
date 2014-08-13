@@ -2,7 +2,65 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
+    <title>DOMWork demo app</title>
+    <style type="text/css">
+        .todo {
+            position: relative;
+            background-color: #ccc;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .caption {
+            font-size: 1.2em;
+            background: #eee;
+            padding: 3px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            clear: both;
+            overflow: auto;
+        }
+        .caption-title {
+            position: relative;
+            float: left;
+        }
+        .total {
+            position: relative;
+            float: right;
+        }
+        .task-input-container {
+            padding: 3px;
+            border-left: 2px solid #eee;
+            border-right: 2px solid #eee;
+            text-align: center;
+        }
+        .task-input {
+            width: 99%;
+            border: 0px;
+            padding: 10px 5px;
+        }
+        .tasks {
+            border-left: 2px solid #eee;
+            border-right: 2px solid #eee;
+            border-bottom: 2px solid #eee;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+        ul {
+            list-style-type: none;
+            margin: 0px;
+            padding-left: 10px;
+        }
+        .task {
+            padding: 3px 0;
+        }
+        .delete {
+            cursor: pointer;
+            color: #990000;
+        }
+        .delete:hover {
+            background-color: #888;
+        }
+    </style>
 </head>
 <body>
 
@@ -13,8 +71,30 @@
     </script>
 
     <input id='nm' placeholder='Input your name'>
-    <p>Test handlebars template</p>
     <div id='content'></div>
+
+</div>
+
+
+<div class='todo'>
+
+    <script id="task-template" type="text/x-handlebars-template">
+        <li class='task'>{{num}}. {{task}} <span class='delete' data-id='{{id}}'>&#x2716;</span></li>
+    </script>
+
+    <div class='caption'>
+        <div class='caption-title'><span id='tasksOwner'></span>Tasks</div>
+        <div class='total' id='todoTasksTotal'>Total: 0</div>
+    </div>
+
+
+    <div class='task-input-container'>
+        <input class='task-input'id='todoTaskInput' placeholder="Input task">
+    </div>
+
+    <div class='tasks'>
+        <ul id="todoTasks"></ul>
+    </div>
 
 </div>
 
@@ -22,24 +102,51 @@
 <script type="text/javascript">
     window.onload = function() {
 
+        var KEYCODE_ENTER = 13;
+
         var widgets = {};
+
+        var lss = new localStorageService();
 
         //Compiling habdlebars template
         var source = $DW().byId('test-template').elements[0].innerHTML;
         //template here is a function that accepts data object
-        var template = $DW.Handlebars.compile(source);
+        var greetingTemplate = $DW.Handlebars.compile(source);
+
+        //Compiling habdlebars template
+        var source = $DW().byId('task-template').elements[0].innerHTML;
+        //template here is a function that accepts data object
+        var taskTemplate = $DW.Handlebars.compile(source);
 
         function nameInputWidget() {
 
             this.name = "nameInput";
 
             this.start = function() {
+
+                //We are getting saved in localstorage name
+                var name = lss.get('name') || '';
+
+                //Place name in our name input directly
+                $DW().byId('nm').elements[0].value = name;
+
+                //Publish an app/greetind topic
+                $DW.pubsub.publish('app/greeting', {name: name});
+
                 $DW().byId('nm').bind('keydown', function() {
 
                     //For correct immidiate keydown work we need a hack with timeout 0
                     setTimeout(function() {
                         var name = $DW().byId('nm').elements[0].value;
+
                         $DW.pubsub.publish('app/greeting', {name: name});
+
+                        //Save name to localstorage
+                        $DW.pubsub.publish('localstorage/save', {
+                            name: "name", 
+                            data: name
+                        });
+
                     }, 0);
                     
                 });
@@ -56,15 +163,153 @@
 
                         //inserting Handlebars template
                         var data = { name: data.name };
-                        $DW().byId('content').insHTML(template(data));
+                        $DW().byId('content').insHTML(greetingTemplate(data));
 
                     }
                 });
             };
         }
 
+        function taskInputWidget() {
+
+            this.name = "taskInput";
+
+            this.start = function() {
+                $DW().byId('todoTaskInput').bind('keypress', function(event) {
+
+                    if (event.keyCode === KEYCODE_ENTER) {
+                        var task = $DW().node(this).elements[0].value;
+                        $DW().node(this).elements[0].value = '';
+                        $DW.pubsub.publish('app/addTask', {task: task});
+                    }
+                    
+                });
+            };
+        }
+
+        function tasksDisplayWidget() {
+
+            this.name = "taskDisplay";
+
+            var tasks = lss.get('tasks') || [];
+
+            this.start = function() {
+
+                countTasks()
+                showTasks();
+
+                $DW.pubsub.subscribe('app/addTask', function(data) {
+                    addTask(data);
+                    saveTasks();
+                });
+
+                $DW.pubsub.subscribe('app/deleteTask', function(data) {
+                    tasks.splice(data.id, 1);
+                    countTasks();
+                    showTasks();
+                    saveTasks();
+                });
+
+                $DW.pubsub.subscribe('app/greeting', function(data) {
+                    if (data.name !== '') {
+                        $DW().byId('tasksOwner').insHTML(data.name + "'s ");
+                    }
+                });
+
+                /*
+                I'm using javascript event bubbling to bind it to #todoTask's
+                children that have 'delete' class
+                */
+                $DW().byId('todoTasks').bind('click', function(event) {
+
+                    if (event.target.className === 'delete') {
+                        var id = $DW().node(event.target).attr('data-id');
+                        $DW.pubsub.publish('app/deleteTask', {id: id});
+                    }
+
+                });
+                
+            };
+
+            function addTask(data) {
+                tasks.push(data.task);
+                showTasks();
+                countTasks();
+            }
+
+            function countTasks() {
+                $DW.pubsub.publish('app/countTask', {total: tasks.length});
+            }
+
+            function showTasks() {
+                var layout = "";
+
+                for (var i = 0; i < tasks.length; i++) {
+                    //We are loading new data in taskTemplate and adding resulting HTML to layout variable
+                    var data = { task: tasks[i], id: i, num: i+1 };
+                    layout += taskTemplate(data);
+                }
+
+                $DW().byId('todoTasks').insHTML(layout);
+                
+            }
+
+            function saveTasks() {
+                $DW.pubsub.publish('localstorage/save', {
+                    name: 'tasks',
+                    data: tasks
+                });
+            }
+
+        }
+
+        function tasksTotalWidget() {
+            this.name = "tasksTotal";
+
+            this.start = function() {
+                /*
+                This widget only subscribes on app/countTask topic to show it's amount
+                The power of pubsub is that we can delete this talksTotalWidget and nothing will be broken.
+                */
+                $DW.pubsub.subscribe('app/countTask', function(data) {
+                    $DW().byId('todoTasksTotal').insHTML('Total: '+data.total);
+                });
+            }
+
+        }
+
+        function localStorageService() {
+
+            this.get = function( name ) {
+                return JSON.parse(localStorage.getItem( name ));
+            }
+
+            $DW.pubsub.subscribe('localstorage/save', function(data) {
+                localStorage.setItem(data.name, JSON.stringify(data.data));
+            });
+        }
+
+        var tiw = new taskInputWidget();
+        var tdw = new tasksDisplayWidget();
+        var ttw = new tasksTotalWidget();
+
         var ndw = new nameDisplayWidget();
         var niw = new nameInputWidget();
+
+        /*
+            We need to load widgets in a right order.
+
+            Remember simple rule: if widget have a subscribe in constructor or start function,
+            it goes before widgets that publishes that topic in constructor or start function.
+
+            If widgets publishing or subscribing topics in events, the order isn't important.
+            
+            In ideal world it will be a DOMWork plugin doing it.
+        */
+
+        widgets[ttw.name] = ttw;
+        widgets[tiw.name] = tiw;
+        widgets[tdw.name] = tdw;
 
         widgets[ndw.name] = ndw;
         widgets[niw.name] = niw;
