@@ -13,7 +13,7 @@
 
                 var reqString = '';
                 for (var d in options.data) {
-                    reqString += d + '=' + options.data.toString();
+                    reqString += d + '=' + options.data[d].toString();
                 }
 
                 return new Promise(function(resolve, reject) {
