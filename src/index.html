@@ -5,31 +5,70 @@
     <title></title>
 </head>
 <body>
-    <div id="test">Some default text</div>
-    <div id="append"></div>
 
-    <ul>
-        <li class="test">One</li>
-        <li class="test">Two</li>
-        <li class="test">Three</li>
-    </ul>
-    <button id='btn'>Button</button>
+<div>
 
+    <script id="test-template" type="text/x-handlebars-template">
+        <p>Hello, {{name}}</p>
+    </script>
+
+    <input id='nm' placeholder='Input your name'>
+    <p>Test handlebars template</p>
+    <div id='content'></div>
+
+</div>
 
 <script type="text/javascript" src="domwork.js"></script>
 <script type="text/javascript">
     window.onload = function() {
-    	$DW().byId('btn').bind('click', function() {
-    		$DW.pubsub.publish('app/alert', 'Message');
-    	});
 
-    	$DW.pubsub.subscribe('app/alert', function(m) {
-    		alert(m);
-    	});
+        var widgets = {};
 
-    	$DW.pubsub.subscribe('app/alert', function(m) {
-    		console.log(m);
-    	});
+        //Compiling habdlebars template
+        var source = $DW().byId('test-template').elements[0].innerHTML;
+        var template = $DW.Handlebars.compile(source);
+
+        function nameInputWidget() {
+
+            this.name = "nameInput";
+
+            this.start = function() {
+                $DW().byId('nm').bind('keydown', function() {
+
+                    //For correct immidiate keydown work we need a hack with timeout 0
+                    setTimeout(function() {
+                        var name = $DW().byId('nm').elements[0].value;
+                        $DW.pubsub.publish('app/greeting', {name: name});
+                    }, 0);
+                    
+                });
+            };
+        }
+
+        function nameDisplayWidget() {
+
+            this.name = "nameDisplay";
+
+            this.start = function() {
+                $DW.pubsub.subscribe('app/greeting', function(data) {
+                    if (data.name !== '') {
+                        var data = { name: data.name};
+                        $DW().byId('content').insHTML(template(data));
+                    }
+                });
+            };
+        }
+
+        var ndw = new nameDisplayWidget();
+        var niw = new nameInputWidget();
+
+        widgets[ndw.name] = ndw;
+        widgets[niw.name] = niw;
+
+        for (var widget in widgets) {
+            widgets[widget].start();
+        }
+
     }
 
 </script>
