@@ -107,7 +107,13 @@ module.exports = function (grunt) {
                     base: 'coverage/'
                 }
             }
-        }
+        },
+        'gh-pages': {
+            options: {
+                base: 'dist/'
+            },
+            src: ['**/*']
+        },
     });
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -117,6 +123,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-gh-pages');
+
 
     grunt.registerTask('test', ['jshint', 'jasmine:test']);
     grunt.registerTask('default', ['jshint','jasmine:coverage']);
@@ -150,6 +158,8 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('build:min', ['test', 'clean', 'concat:min', 'uglify', 'copy']);
+
+    grunt.registerTask('deploy', ['build', 'gh-pages']);
 
     grunt.registerTask('coverage', 'start web server for viewing istanbul coverage in browser', function() {
         grunt.task.run('jasmine:coverage');
