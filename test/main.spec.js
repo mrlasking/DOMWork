@@ -144,6 +144,10 @@ describe('1. Main DOMWork library', function () {
             expect($elems).toHaveClass('test2');
         });
 
+        /*
+        TODO: write tests that proves function working on elements got by class
+         */
+
     });
 
     describe('1.3 Creating by tag', function() {
