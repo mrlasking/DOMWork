@@ -126,11 +126,23 @@
     };
     
     DOMWork.prototype.attr = function (attributeName, attributeValue) {
-        this.elements.forEach(function (element) {
-            element.setAttribute(attributeName,attributeValue);
-        });
+
+        if (typeof attributeValue === 'undefined') {
+            return this.elements[0].getAttribute( attributeName );
+        }
+
+        if( attributeValue === '' ) {
+            this.elements.forEach(function (element) {
+                element.removeAttribute(attributeName);
+            });
+        } else {
+            this.elements.forEach(function (element) {
+                element.setAttribute(attributeName,attributeValue);
+            });
+        }
 
         return this;
+
     };
 
     DOMWork.prototype.plugin = function( plugin ) {

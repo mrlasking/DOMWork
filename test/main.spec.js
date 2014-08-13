@@ -39,11 +39,13 @@ describe('1. Main DOMWork library', function () {
         it('1.1.3.1 Should append one element to another', function () {
             elem.appendTo($DW().byId('append'));
             expect($elem.parent()).toContainElement('div#test');
+            expect($elem.parent().children().last().attr('id')).toBe('test')
         });
 
         it('1.1.3.2 Should prepend one element to another', function () {
             elem.prependTo($DW().byId('append'));
             expect($elem.parent()).toContainElement('div#test');
+            expect($elem.parent().children().first().attr('id')).toBe('test')
         });
 
         it('1.1.4 Should add classes to element', function () {
@@ -97,8 +99,28 @@ describe('1. Main DOMWork library', function () {
         });
 
         it('1.1.10 Should set an element as node', function () {
-            var node = $DW().node($elem);
+            var node = $DW().node($elem[0]);
             expect(node.elements.length).toBeGreaterThan(0);
+            expect(typeof node.elements[0].tagName).not.toBe('undefined');
+        });
+
+        it('1.1.11 Should set element attribute', function () {
+            elem.attr('test', 'test');
+            expect($elem.attr('test')).toBe('test');
+        });
+
+        it('1.1.12 Should get element attribute', function () {
+            elem.attr('test', 'test');
+            expect(elem.attr('test')).toBe('test');
+        });
+
+        it('1.1.13 Should remove element attribute', function () {
+            elem.attr('test', '');
+            expect(elem.attr('test')).toBeNull();
+        });
+
+        it('1.1.14 Should return null when getting nonexistent attribute', function() {
+            expect(elem.attr('nonexistent')).toBeNull();
         });
 
     });
