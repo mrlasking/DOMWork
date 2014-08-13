@@ -35,7 +35,7 @@ module.exports = function (grunt) {
                 files: [
                     {
                         expand: true,
-                        src: ['src/index.html'], dest: 'dist/',
+                        src: ['src/index.html', 'src/data.json'], dest: 'dist/',
                         flatten: true
                     }
                 ]
@@ -66,12 +66,17 @@ module.exports = function (grunt) {
             coverage: {
                 src: ['src/js/**/*.js'],
                 options: {
-                    specs: ["test/main.spec.js", "test/plugins/showhide.spec.js", "test/plugins/pubsub.spec.js"],
+                    specs: [
+                        "test/main.spec.js",
+                        "test/plugins/showhide.spec.js",
+                        "test/plugins/pubsub.spec.js",
+                        "test/plugins/ajax.spec.js"
+                    ],
                     vendor: [
                         'bower_components/jquery/dist/jquery.js',
                         'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
-                        'bower_components/sinonjs/sinon.js'
-                        
+                        'bower_components/sinonjs/sinon.js',
+                        'bower_components/rsvp/rsvp.js'
                     ],
                     version: '2.0.0',
                     template: require('grunt-template-jasmine-istanbul'),
@@ -93,9 +98,16 @@ module.exports = function (grunt) {
                     vendor: [
                         'bower_components/jquery/dist/jquery.js',
                         'bower_components/jasmine-jquery/lib/jasmine-jquery.js',
-                        'bower_components/sinonjs/sinon.js'
+                        'bower_components/sinonjs/sinon.js',
+                        'bower_components/rsvp/rsvp.js'
+
                     ],
-                    specs: ["test/main.spec.js", "test/plugins/showhide.spec.js", "test/plugins/pubsub.spec.js"],
+                    specs: [
+                        "test/main.spec.js",
+                        "test/plugins/showhide.spec.js",
+                        "test/plugins/pubsub.spec.js",
+                        "test/plugins/ajax.spec.js"
+                    ],
                     version: '2.0.0'
                 }
             }

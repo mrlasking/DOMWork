@@ -35,6 +35,8 @@ Option '--plugins' tells grunt to add files with specified names from src/js/plu
 
 E.g: ```grunt build --plugins=showhide``` will add a src/js/plugins/showhide.js plugin.
 
+###Plugins
+
 ###PubSub
 
 DOMWork has a plugin with Addy Osmani publish/subscribe implementation.
@@ -69,3 +71,33 @@ $DW().byId('btn').bind('click', function() {
 
 ```
 
+####AJAX
+
+Plugin adds support of ajax requests (if your browser supports Promises, otherwise connect RSVP library to work with it) (https://github.com/tildeio/rsvp.js/)
+
+To perform an ajax request, simply use the following syntax (you can use $DW.post if you want to send post request):
+
+```javascript
+var promise = $DW.get({
+    url: 'http://example.com',
+    data: {
+        param1: 'value1',
+        param2: 'value2'
+    }
+});
+```
+
+It returns Promise object, and you can work with it such way:
+
+```javascript
+promise.then(
+    function(data) {
+        //work with received data here
+    }, 
+    function(error) {
+        //work with Error object here
+    }
+);
+```
+
+Read more about Promises here: (http://promisesaplus.com/)
