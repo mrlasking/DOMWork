@@ -17,7 +17,7 @@ You can use ```grunt test``` command to run jshint and jasmine tests.
 
 Also you can use ```grunt coverage``` command to view tests code coverage.
 
-If you want to deploy test application to github pages (http://mrlasking.github.io/domwork)
+If you want to deploy test application to github pages (http://mrlasking.github.io/DOMWork)
 use ```grunt deploy``` command
 
 ####Building
