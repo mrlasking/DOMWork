@@ -155,7 +155,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-coveralls');
 
 
-    grunt.registerTask('test', ['jshint', 'jasmine:coverage', 'coveralls']);
+    grunt.registerTask('test:coverage', ['jshint', 'jasmine:coverage', 'coveralls']);
+    grunt.registerTask('test', ['jshint','jasmine:test']);
+
     grunt.registerTask('default', ['jshint','jasmine:test']);
 
     grunt.registerTask('build', 'build domwork', function() {

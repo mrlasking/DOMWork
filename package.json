@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "grunt demo",
-    "test": "grunt test"
+    "test": "grunt test:coverage"
   },
   "repository": {
     "type": "git",
