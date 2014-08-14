@@ -1,7 +1,7 @@
 DOMWork  [![Build Status](https://travis-ci.org/mrlasking/DOMWork.svg?branch=master)](https://travis-ci.org/mrlasking/DOMWork) [![Coverage Status](https://coveralls.io/repos/mrlasking/DOMWork/badge.png?branch=master)](https://coveralls.io/r/mrlasking/DOMWork?branch=master)
 =======
 
-Simple extendible DOM manipulation library. 
+Simple extendible javascript library. 
 
 
 ###Installation
