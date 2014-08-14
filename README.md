@@ -1,4 +1,4 @@
-DOMWork  [![Build Status](https://travis-ci.org/mrlasking/DOMWork.svg?branch=master)](https://travis-ci.org/mrlasking/DOMWork)
+DOMWork  [![Build Status](https://travis-ci.org/mrlasking/DOMWork.svg?branch=master)](https://travis-ci.org/mrlasking/DOMWork) [![Coverage Status](https://coveralls.io/repos/mrlasking/DOMWork/badge.png)](https://coveralls.io/r/mrlasking/DOMWork)
 =======
 
 Simple extendible DOM manipulation library. 
