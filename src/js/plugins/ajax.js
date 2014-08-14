@@ -46,8 +46,8 @@
 
                     if (method === "POST") {
                         req.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-                        req.setRequestHeader("Content-length", params.length);
-                        req.setRequestHeader("Connection", "close");
+                        /*req.setRequestHeader("Content-length", reqString.length);
+                        req.setRequestHeader("Connection", "close");*/
                     }
 
                     req.send( reqString );

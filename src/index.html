@@ -168,6 +168,8 @@
                 method: 'POST'
             }).then(function(data) {
                 $DW.pubsub.publish('app/ajaxPostTest', data);
+            }, function(err) {
+                console.log(err);
             });
 
             this.name = 'ajaxData';
@@ -186,13 +188,15 @@
 
                 $DW.pubsub.subscribe('app/ajaxPostTest', function(data) {
 
-                    var layout = "";
+                    var data = JSON.parse( data );
 
-                    for (var i = 0; i < data.length; i++) {
-                        layout += ajaxTemplate(data[i]);
+                    var layout2 = '';
+
+                    for (var j = 0; j < data.length; j++) {
+                        layout2 += ajaxTemplate(data[j]);
                     }
 
-                    $DW().byId('ajax-post-result').insHTML(layout);
+                    $DW().byId('ajax-post-result').insHTML(layout2);
 
                 });
             }

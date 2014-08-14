@@ -13,6 +13,10 @@ You need to have bower and grunt-cli installed globally, so run ```npm install -
 After that install bower dependencies: ```bower install```
 
 ###Grunt commands
+
+To view demo application, use ```grunt demo``` command. It may open your browser earlier than server starts, so just refresh 
+the page when you see a "Listening on port 3000" in console.
+
 You can use ```grunt test``` command to run jshint and jasmine tests.
 
 Also you can use ```grunt coverage``` command to view tests code coverage.
