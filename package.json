@@ -1,9 +1,10 @@
 {
   "name": "domwork",
-  "version": "0.0.3",
-  "description": "Simple library for working with DOM",
+  "version": "0.1.0",
+  "description": "Simple extendible javascript library",
   "main": "index.js",
   "scripts": {
+    "start": "grunt demo",
     "test": "grunt test"
   },
   "repository": {

@@ -143,7 +143,6 @@
         function ajaxDataWidget() {
 
             var req = $DW.get({
-                //url: '/data.json'
                 url: 'http://localhost:3000/test',
                 data: {
                     test: 'test-get',
@@ -153,13 +152,21 @@
 
             req.then(function(data) {
                 return JSON.parse(data);
-            }).then(function(data) {
+            }).then(function(data) { //Using then chaining
                 $DW.pubsub.publish('app/ajaxGetTest', data);
+            }, function(err) { //Second parameter in then is a function that executes on error
+
+                console.log(err);
+                console.log('GET: Maybe you are watching this page from github - it have not backend server.\nFalling back to data.json file loading');
+
+                fallbackRequest('get').then(function(data) {
+                    $DW.pubsub.publish('app/ajaxGetTest', data);
+                });
+
             });
 
             //And another way of calling:
             $DW.post({
-                //url: '/data.json'
                 url: 'http://localhost:3000/testPost',
                 data: {
                     test: 'test-post',
@@ -169,36 +176,55 @@
             }).then(function(data) {
                 $DW.pubsub.publish('app/ajaxPostTest', data);
             }, function(err) {
+
                 console.log(err);
+                console.log('POST: Maybe you are watching this page from github - it have not backend server.\nFalling back to data.json file loading');
+
+                fallbackRequest('post').then(function(data) {
+                    $DW.pubsub.publish('app/ajaxPostTest', data);
+                });
             });
+
+            function fallbackRequest( method ) {
+                return $DW[method]({
+                    url: '/data.json',
+                    data: {
+                        test: 'test-get',
+                        id: 1
+                    }
+                });
+            };
 
             this.name = 'ajaxData';
             this.start = function() {
                 $DW.pubsub.subscribe('app/ajaxGetTest', function(data) {
 
-                    var layout = "";
-
-                    for (var i = 0; i < data.length; i++) {
-                        layout += ajaxTemplate(data[i]);
-                    }
-
-                    $DW().byId('ajax-get-result').insHTML(layout);
+                    processResponse(data, 'get');
 
                 });
 
                 $DW.pubsub.subscribe('app/ajaxPostTest', function(data) {
 
-                    var data = JSON.parse( data );
-
-                    var layout2 = '';
-
-                    for (var j = 0; j < data.length; j++) {
-                        layout2 += ajaxTemplate(data[j]);
-                    }
-
-                    $DW().byId('ajax-post-result').insHTML(layout2);
+                    processResponse(data, 'post');
 
                 });
+
+                function processResponse( data, method ) {
+
+                    var method = method || 'get';
+
+                    if (typeof data !== 'object') {
+                        data = JSON.parse( data );
+                    }
+
+                    var layout = '';
+
+                    for (var j = 0; j < data.length; j++) {
+                        layout += ajaxTemplate(data[j]);
+                    }
+
+                    $DW().byId('ajax-'+method+'-result').insHTML(layout);
+                }
             }
         }
 
