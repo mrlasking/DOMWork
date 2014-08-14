@@ -64,7 +64,7 @@ module.exports = function (grunt) {
         },
         jasmine: {
             coverage: {
-                src: ['src/js/**/*.js'],
+                src: ["src/js/class.DOMWork.js", "src/js/plugins/*.js"],
                 options: {
                     specs: [
                         "test/main.spec.js",
@@ -97,7 +97,7 @@ module.exports = function (grunt) {
                 }
             },
             test: {
-                src: ["src/js/class.DOMWork.js", "src/js/plugins/*.js", "src/js/demo.app.js"],
+                src: ["src/js/class.DOMWork.js", "src/js/plugins/*.js"],
                 options: {
                     vendor: [
                         'bower_components/jquery/dist/jquery.js',
