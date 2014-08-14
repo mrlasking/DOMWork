@@ -1,4 +1,4 @@
-describe('4. AJAX plugin', function () {
+describe('AJAX plugin', function () {
 
     var server;
 
@@ -6,7 +6,7 @@ describe('4. AJAX plugin', function () {
         //$DW.ajax.restore();
     });
 
-    it("4.1 Should return promises when calling DW.ajax and it\'s aliases", function () {
+    it("1 Should return promises when calling DW.ajax and it\'s aliases", function () {
         var promise1 = $DW.ajax({
             url: "http://localhost",
             data: {

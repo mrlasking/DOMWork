@@ -1,6 +1,6 @@
 jasmine.getFixtures().fixturesPath = 'test/fixtures';
 
-describe('3. PubSub plugin', function () {
+describe('PubSub plugin', function () {
 
     var $elem;
     var elem;
@@ -11,7 +11,7 @@ describe('3. PubSub plugin', function () {
         $elem = $('#test');
     });
 
-    it('3.1 Should subscribe to topic', function() {
+    it('1 Should subscribe to topic', function() {
     	var callback = sinon.spy();
     	var subscription = $DW.pubsub.subscribe('test/test1', callback);
 
@@ -19,7 +19,7 @@ describe('3. PubSub plugin', function () {
 
     });
 
-    it('3.2 Should execute a function by publishing topic', function() {
+    it('2 Should execute a function by publishing topic', function() {
 
     	var callback = sinon.spy();
 
@@ -37,7 +37,7 @@ describe('3. PubSub plugin', function () {
 
     });
 
-    it('3.3 Should unsubscribe from topic', function() {
+    it('3 Should unsubscribe from topic', function() {
 
     	var callback = sinon.spy();
 
@@ -60,7 +60,7 @@ describe('3. PubSub plugin', function () {
 
     });
 
-    it('3.4 Should return false when publishing a topic without subscribers', function() {
+    it('4 Should return false when publishing a topic without subscribers', function() {
 
     	var answer = $DW.pubsub.publish('test/test4', {value: 1});
     	expect(answer).toBe(false);

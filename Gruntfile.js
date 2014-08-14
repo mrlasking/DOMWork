@@ -68,9 +68,7 @@ module.exports = function (grunt) {
                 options: {
                     specs: [
                         "test/main.spec.js",
-                        "test/plugins/showhide.spec.js",
-                        "test/plugins/pubsub.spec.js",
-                        "test/plugins/ajax.spec.js"
+                        "test/plugins/**/*.spec.js"
                     ],
                     vendor: [
                         'bower_components/jquery/dist/jquery.js',
@@ -104,9 +102,7 @@ module.exports = function (grunt) {
                     ],
                     specs: [
                         "test/main.spec.js",
-                        "test/plugins/showhide.spec.js",
-                        "test/plugins/pubsub.spec.js",
-                        "test/plugins/ajax.spec.js"
+                        "test/plugins/**/*.spec.js"
                     ],
                     version: '2.0.0'
                 }
