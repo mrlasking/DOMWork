@@ -191,9 +191,8 @@ Visit https://github.com/mrlasking/domwork for new versions or contributing. */
         this.required = [
             "ajax",
             "handlebars",
-            "pubsub",
+            "pubsub"
         ];
-
 
         var notLoadedPlugins = [];
         for (var i = 0, l = this.required.length; i<l; i++) {
@@ -270,7 +269,7 @@ Visit https://github.com/mrlasking/domwork for new versions or contributing. */
 
             function fallbackRequest(method) {
                 return $DW[method]({
-                    url: '/data.json',
+                    url: 'data.json',
                     data: {
                         test: 'test-get',
                         id: 1

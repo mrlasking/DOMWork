@@ -83,7 +83,7 @@
 
             function fallbackRequest(method) {
                 return $DW[method]({
-                    url: '/data.json',
+                    url: 'data.json',
                     data: {
                         test: 'test-get',
                         id: 1
