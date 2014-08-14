@@ -3,15 +3,15 @@
   "version": "0.1.0",
   "homepage": "https://github.com/mrlasking/domwork",
   "authors": [
-    "Dmitry Podanchuk & Pavel Evsegneev"
+    { "name": "Dmitry Podanchuk"},
+    { "name": "Pavel Evsegneev", "email": "deadswallow@gmail.com" }
   ],
-  "description": "Simple DOM manipulation library",
+  "description": "Simple extendible javascript library",
   "main": "dist/domwork.js",
   "moduleType": [
     "globals"
   ],
   "license": "ISC",
-  "private": true,
   "ignore": [
     "**/.*",
     "node_modules",
