@@ -15,7 +15,7 @@ describe('PubSub plugin', function () {
     	var callback = sinon.spy();
     	var subscription = $DW.pubsub.subscribe('test/test1', callback);
 
-    	expect(subscription).toBe(1);
+    	expect(subscription).toBeGreaterThan(0);
 
     });
 
@@ -27,7 +27,7 @@ describe('PubSub plugin', function () {
     		obj.f();
     	});
 
-    	expect(subscription).toBe(2);
+    	expect(subscription).toBeGreaterThan(0);
 
     	expect(callback.called).toBe(false);
 
@@ -45,7 +45,7 @@ describe('PubSub plugin', function () {
     		obj.f();
     	});
 
-    	expect(subscription).toBe(3);
+    	expect(subscription).toBeGreaterThan(0);
     	expect(callback.called).toBe(false);
 
     	$DW.pubsub.publish('test/test3', {f: callback});
