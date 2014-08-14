@@ -35,7 +35,7 @@ module.exports = function (grunt) {
                 files: [
                     {
                         expand: true,
-                        src: ['src/index.html', 'src/data.json', 'src/index.js'], dest: 'dist/',
+                        src: ['src/index.html', 'src/data.json', 'src/index.js', 'src/js/demo.app.js'], dest: 'dist/',
                         flatten: true
                     }
                 ]
@@ -97,7 +97,7 @@ module.exports = function (grunt) {
                 }
             },
             test: {
-                src: ["src/js/**/*.js"],
+                src: ["src/js/class.DOMWork.js", "src/js/plugins/*.js", "src/js/demo.app.js"],
                 options: {
                     vendor: [
                         'bower_components/jquery/dist/jquery.js',
