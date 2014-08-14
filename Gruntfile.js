@@ -80,13 +80,19 @@ module.exports = function (grunt) {
                     template: require('grunt-template-jasmine-istanbul'),
                     templateOptions: {
                         coverage: 'coverage/coverage.json',
-                        report: 'coverage',
+                        report: {
+                            type: "lcov",
+                            options: {
+                                dir: 'coverage/'
+                            }
+                        },
                         thresholds: {
                             lines: 75,
                             statements: 75,
                             branches: 75,
                             functions: 90
                         }
+
                     }
                 }
             },
@@ -112,7 +118,7 @@ module.exports = function (grunt) {
             coverage: {
                 options: {
                     port: 8080,
-                    base: 'coverage/'
+                    base: 'coverage/lcov-report'
                 }
             }
         },
@@ -129,6 +135,11 @@ module.exports = function (grunt) {
                     'dist/index.js',
                 ]
             }
+        },
+        coveralls: {
+            main: {
+                src: 'coverage/lcov.info'
+            }
         }
     });
 
@@ -141,6 +152,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-run');
     grunt.loadNpmTasks('grunt-gh-pages');
+    grunt.loadNpmTasks('grunt-coveralls');
 
 
     grunt.registerTask('test', ['jshint', 'jasmine:test']);
