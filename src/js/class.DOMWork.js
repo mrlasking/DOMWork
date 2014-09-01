@@ -4,8 +4,19 @@
         this.elements = [];
     };
 
-    function DW() {
-        return new DOMWork();
+    function DW(selector) {
+      if (!!selector) {
+        switch (selector[0]) {
+          case '.':
+            return new DOMWork().byClass(selector.substr(1));
+          case '#':
+            return new DOMWork().byId(selector.substr(1));
+          default:
+            return new DOMWork().createByTag(selector);
+        }
+      }
+      
+      return new DOMWork();
     }
 
     DW.plugins = [];
