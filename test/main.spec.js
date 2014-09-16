@@ -31,6 +31,11 @@ describe(' Main DOMWork library', function () {
             expect(elem.elements.length).toBe(1);
         });
 
+        it('1.1.1 Should create one element in elements got by facade', function () {
+            var elemById = $DW('#test');
+            expect(elemById.elements.length).toBe(1);
+        });
+
         it('1.2 Should insert html into selected element', function () {
             elem.insHTML('Test');
             expect($elem).toContainText('Test');
@@ -149,6 +154,11 @@ describe(' Main DOMWork library', function () {
             expect(elems.elements.length).toBe(3);
         });
 
+        it('2.1.1 Should get elements by class via facade', function () {
+            var elemByClass = $DW('.test');
+            expect(elemByClass.elements.length).toBe(3);
+        });
+
         it('2.2 Should add a class to all elements', function () {
             elems.addClass('test2');
             expect($elems).toHaveClass('test2');
@@ -173,6 +183,40 @@ describe(' Main DOMWork library', function () {
             $DW().createByTag('div').insHTML('Created').addClass('created').appendTo( $DW().byId('test') );
             expect($elem).toContainElement('div.created')
         });
+
+        it('3.2 Should create element via facade and append it', function () {
+            $DW('div').html('Created').addClass('createdFromFacade').appendTo( $DW().byId('test') );
+            expect($elem).toContainElement('div.createdFromFacade')
+        });
+
+    });
+
+    describe('4 Getting real node', function() {
+        var $elem;
+        var elem;
+        var nodeElem;
+
+        beforeEach(function () {
+            loadFixtures('main.html');
+            $elem = $('#test');
+        });
+
+        it('4.1 Should get element from node', function() {
+            nodeElem = document.getElementById('test');
+            elem = $DW().node(nodeElem);
+
+            expect(elem.html() === 'Some default text');
+
+        });
+
+        it('4.1.1 Should get element from node via facade', function() {
+            nodeElem = document.getElementById('test');
+            elem = $DW(nodeElem);
+
+            expect(elem.html() === 'Some default text');
+
+        });
+
     });
 
 });

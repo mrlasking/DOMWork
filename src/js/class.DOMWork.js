@@ -5,7 +5,13 @@
     };
 
     function DW(selector) {
+
       if (!!selector) {
+
+        if (selector instanceof HTMLElement) {
+          return new DOMWork().node(HTMLElement);
+        }
+
         switch (selector[0]) {
           case '.':
             return new DOMWork().byClass(selector.substr(1));
@@ -14,6 +20,7 @@
           default:
             return new DOMWork().createByTag(selector);
         }
+        
       }
       
       return new DOMWork();
@@ -45,7 +52,12 @@
         return this;
     };
 
-    DOMWork.prototype.insHTML = function (html) {
+    DOMWork.prototype.html = DOMWork.prototype.insHTML = function (html) {
+
+        if (typeof html === 'undefined') {
+            return this.elements[0].innerHTML;
+        }
+
         this.elements.map(function (elem) {
             elem.innerHTML = html;
         });
