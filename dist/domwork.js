@@ -1,5 +1,5 @@
 /*! 
-domwork - v0.1.0 - 2014-08-14 
+domwork - v0.1.1 - 2014-09-16 
 Created by Dmitry Podanchuk & Pavel Evsegneev
 License: ISC
 Visit https://github.com/mrlasking/domwork for new versions or contributing. */
@@ -9,8 +9,26 @@ Visit https://github.com/mrlasking/domwork for new versions or contributing. */
         this.elements = [];
     };
 
-    function DW() {
-        return new DOMWork();
+    function DW(selector) {
+
+      if (!!selector) {
+
+        if (selector instanceof HTMLElement) {
+          return new DOMWork().node(HTMLElement);
+        }
+
+        switch (selector[0]) {
+          case '.':
+            return new DOMWork().byClass(selector.substr(1));
+          case '#':
+            return new DOMWork().byId(selector.substr(1));
+          default:
+            return new DOMWork().createByTag(selector);
+        }
+        
+      }
+      
+      return new DOMWork();
     }
 
     DW.plugins = [];
@@ -39,7 +57,12 @@ Visit https://github.com/mrlasking/domwork for new versions or contributing. */
         return this;
     };
 
-    DOMWork.prototype.insHTML = function (html) {
+    DOMWork.prototype.html = DOMWork.prototype.insHTML = function (html) {
+
+        if (typeof html === 'undefined') {
+            return this.elements[0].innerHTML;
+        }
+
         this.elements.map(function (elem) {
             elem.innerHTML = html;
         });
@@ -184,6 +207,7 @@ Visit https://github.com/mrlasking/domwork for new versions or contributing. */
 
 /* istanbul ignore next */
 }(window || exports);
+
 !function($DW) {
 
     function start() {
