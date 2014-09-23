@@ -1,5 +1,5 @@
 /*! 
-domwork - v0.1.1 - 2014-09-16 
+domwork - v0.1.1 - 2014-09-23 
 Created by Dmitry Podanchuk & Pavel Evsegneev
 License: ISC
 Visit https://github.com/mrlasking/domwork for new versions or contributing. */
@@ -9,45 +9,66 @@ Visit https://github.com/mrlasking/domwork for new versions or contributing. */
         this.elements = [];
     };
 
-    function DW(selector) {
+    function DW(selector, context) {
 
-      if (!!selector) {
+        //console.log(context);
 
-        if (selector instanceof HTMLElement) {
-          return new DOMWork().node(HTMLElement);
+        if (!!selector) {
+
+            if (selector instanceof HTMLElement) {
+                return new DOMWork().node(HTMLElement);
+            }
+
+            switch (selector[0]) {
+                case '.':
+                    return new DOMWork().byClass(selector.substr(1), context);
+                case '#':
+                    return new DOMWork().byId(selector.substr(1), context);
+                default:
+                    return new DOMWork().createByTag(selector);
+            }
+
         }
 
-        switch (selector[0]) {
-          case '.':
-            return new DOMWork().byClass(selector.substr(1));
-          case '#':
-            return new DOMWork().byId(selector.substr(1));
-          default:
-            return new DOMWork().createByTag(selector);
-        }
-        
-      }
-      
-      return new DOMWork();
+        return new DOMWork();
     }
 
     DW.plugins = [];
-    
-    DOMWork.prototype.node = function(obj){
+
+    DOMWork.prototype.node = function (obj) {
         this.elements = [];
         this.elements.push(obj);
         return this;
     };
 
-    DOMWork.prototype.getById = DOMWork.prototype.byId = function (id) {
+    DOMWork.prototype.getById = DOMWork.prototype.byId = function (id, context) {
         this.elements = [];
         this.elements.push(document.getElementById(id));
         return this;
     };
 
-    DOMWork.prototype.getByClass = DOMWork.prototype.byClass = function (className) {
+    DOMWork.prototype.getByClass = DOMWork.prototype.byClass = function (className, context) {
         this.elements = [];
-        this.elements = [].slice.call(document.getElementsByClassName(className), 0);
+        this.elements = [].slice.call(( context || document ).getElementsByClassName(className), 0);
+        return this;
+    };
+
+    DOMWork.prototype.getByAttribute = DOMWork.prototype.byAttr = function (attrName, attrVal, context) {
+        this.elements = [];
+        this.elements = [].slice.call(( context || document ).getElementsByTagName('*'), 0)
+            .reduce(function (curr, item) {
+                if (item.hasAttribute(attrName)) {
+                    if (!!attrVal) {
+                        if (item.getAttribute(attrName) === attrVal) {
+                            curr.push(item);
+                        }
+                    } else {
+                        curr.push(item);
+                    }
+                }
+                return curr;
+            }, []);
+
         return this;
     };
 
@@ -152,20 +173,20 @@ Visit https://github.com/mrlasking/domwork for new versions or contributing. */
         return this;
 
     };
-    
+
     DOMWork.prototype.attr = function (attributeName, attributeValue) {
 
         if (typeof attributeValue === 'undefined') {
-            return this.elements[0].getAttribute( attributeName );
+            return this.elements[0].getAttribute(attributeName);
         }
 
-        if( attributeValue === '' ) {
+        if (attributeValue === '') {
             this.elements.forEach(function (element) {
                 element.removeAttribute(attributeName);
             });
         } else {
             this.elements.forEach(function (element) {
-                element.setAttribute(attributeName,attributeValue);
+                element.setAttribute(attributeName, attributeValue);
             });
         }
 
@@ -173,7 +194,7 @@ Visit https://github.com/mrlasking/domwork for new versions or contributing. */
 
     };
 
-    DOMWork.prototype.plugin = function( plugin ) {
+    DOMWork.prototype.plugin = function (plugin) {
         /* istanbul ignore else */
         if (typeof plugin == 'object') {
             if (DW.plugins.indexOf(plugin.name) === -1) {
@@ -187,7 +208,16 @@ Visit https://github.com/mrlasking/domwork for new versions or contributing. */
                 throw new Error('Possible plugins conflict: plugin "' + plugin.name + '" already connected');
             }
         }
-    }
+    };
+
+    DOMWork.prototype.children = function (selector) {
+        if (!!selector) {
+            return DW(selector, this.elements[0]);
+        }
+
+        this.elements = [].slice.call(this.elements[0].children, 0);
+        return this;
+    };
 
     function clearArray(array) {
         return array.filter(function (item, index) {
@@ -205,7 +235,7 @@ Visit https://github.com/mrlasking/domwork for new versions or contributing. */
         window.DW = window.$DW = DW;
     }
 
-/* istanbul ignore next */
+    /* istanbul ignore next */
 }(window || exports);
 
 !function($DW) {

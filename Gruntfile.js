@@ -67,7 +67,7 @@ module.exports = function (grunt) {
                 src: ["src/js/class.DOMWork.js", "src/js/plugins/*.js"],
                 options: {
                     specs: [
-                        "test/main.spec.js",
+                        "test/**.spec.js",
                         "test/plugins/**/*.spec.js"
                     ],
                     vendor: [
