@@ -52,14 +52,8 @@
         this.elements = [];
         this.elements = [].slice.call(( context || document ).getElementsByTagName('*'), 0)
             .reduce(function (curr, item) {
-                if (item.hasAttribute(attrName)) {
-                    if (!!attrVal) {
-                        if (item.getAttribute(attrName) === attrVal) {
-                            curr.push(item);
-                        }
-                    } else {
-                        curr.push(item);
-                    }
+                if ( item.hasAttribute(attrName) && ( elementMatchesAttributeSelector(item, attrName, attrVal) ) ) {
+                    curr.push(item);
                 }
                 return curr;
             }, []);
@@ -218,6 +212,10 @@
         return array.filter(function (item, index) {
             return array.indexOf(item) === index;
         });
+    }
+
+    function elementMatchesAttributeSelector(item, attrName, attrVal) {
+        return (typeof attrVal == 'undefined') || (!!attrVal && item.getAttribute(attrName) === attrVal);
     }
 
     /* istanbul ignore if */
