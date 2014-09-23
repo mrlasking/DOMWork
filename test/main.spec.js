@@ -1,6 +1,6 @@
 jasmine.getFixtures().fixturesPath = 'test/fixtures';
 
-describe(' Main DOMWork library', function () {
+describe(' Main DOMWork library basics', function () {
 
     describe('0 Initializing', function() {
         it('0.1 Should have properties', function() {

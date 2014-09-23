@@ -107,7 +107,7 @@ module.exports = function (grunt) {
 
                     ],
                     specs: [
-                        "test/main.spec.js",
+                        "test/*.spec.js",
                         "test/plugins/**/*.spec.js"
                     ],
                     version: '2.0.0'
